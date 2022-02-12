@@ -6,12 +6,62 @@ import san
 import json
 from lunarcrush import LunarCrush
 from pytrends.request import TrendReq
+import streamlit as st
+import streamlit as st 
+import requests
+from lunarcrush import LunarCrush
+import pandas as pd
+
+
 
 lc = LunarCrush()
 
+def theTweet(url):
+    api="https://publish.twitter.com/oembed?url={}".format(url)
+    response=requests.get(api)
+    res = response.json()["html"] 
+    return res
+
+def feeds(symbol):
+    resS = []
+    feed = lc.get_feeds(symbol)
+    urls=pd.json_normalize(feed['data'])['url']
+    
+    for i in range(min(5,urls.size)):
+        resS.append(theTweet(urls[i]))
+        
+    return resS
+
+# @st.experimental_memo
+def compMultiCryptoBasesAttr(symbols, attr):
+    lc = LunarCrush()
+    data = lc.get_assets(symbol=symbols, data_points=365, interval='year')
+    df=pd.DataFrame()
+    j=0
+    for i in symbols:
+        df[i]=pd.json_normalize(data['data'][j]['timeSeries'])[attr]
+        j+=1
+
+    return df
+    # st.line_chart(df)
+
+
+# @st.experimental_memo
+def data(sym1):
+    data = lc.get_assets(symbol=sym1, data_points=365, interval='year')
+    df=pd.json_normalize(data['data'][0]['timeSeries'])
+    return df
+
+# @st.experimental_memo
+def data2(sym1, sym2):
+    data = lc.get_assets(symbol=[sym1,sym2], data_points=365, interval='year')
+    df=pd.json_normalize(data['data'][0]['timeSeries'])
+    return df
+
 def perChange(sym1, arg):
-    data = lc.get_assets(symbol=[sym1], data_points=365, interval='year')
-    df10=pd.json_normalize(data['data'][0]['timeSeries'])
+    # data = lc.get_assets(symbol=[sym1], data_points=365, interval='year')
+    # df10=pd.json_normalize(data['data'][0]['timeSeries'])
+    df10=data(sym1)
     df=pd.DataFrame(columns=['Price',arg])
     df['Price']=(df10['close']-df10['open'])/df10['open']*100
     t1=df10[arg][1:].reset_index(drop=True)
@@ -21,21 +71,24 @@ def perChange(sym1, arg):
     return df
 
 def dataForSingleCoinDoubleAttribute(sym1, attr1, attr2):
-    data = lc.get_assets(symbol=[sym1], data_points=100, interval='year')
-    df=pd.json_normalize(data['data'][0]['timeSeries'])
-    
+    # data = lc.get_assets(symbol=[sym1], data_points=100, interval='year')
+    # df=pd.json_normalize(data['data'][0]['timeSeries'])
+    df = data(sym1)
     return df[[attr1, attr2]]
 
 def dataForOne(sym1, attr):
-    data = lc.get_assets(symbol=[sym1], data_points=100, interval='year')
-    df=pd.json_normalize(data['data'][0]['timeSeries'])
+    # data = lc.get_assets(symbol=[sym1], data_points=100, interval='year')
+    # df=pd.json_normalize(data['data'][0]['timeSeries'])
     
+    df = data(sym1)
+
     return df[attr]
     # st.line_chart(df[attr])
 
 def compBtwTwoCoinsBasesAttribute(sym1, sym2, attr):
     data = lc.get_assets(symbol=[sym1,sym2], data_points=365, interval='year')
     df10=pd.json_normalize(data['data'][0]['timeSeries'])
+    # df10 = data2(sym1, sym2)
     df11=pd.json_normalize(data['data'][1]['timeSeries'])
     df=pd.DataFrame()
     df[sym1]=df10[attr]
@@ -47,6 +100,8 @@ def socialImpactComp(sym1,sym2):
     # lc = LunarCrush()
     data = lc.get_assets(symbol=[sym1,sym2], data_points=365, interval='year')
     df10=pd.json_normalize(data['data'][0]['timeSeries'])
+    # df10 = data2(sym1, sym2)
+
     df11=pd.json_normalize(data['data'][1]['timeSeries'])
     df=pd.DataFrame(columns=[sym1,sym2])
     df['Bearish']=df10['social_impact_score']
@@ -64,8 +119,9 @@ def socialImpactComp(sym1,sym2):
 
 def bullvsbear(sym1):
     # lc = LunarCrush()
-    data = lc.get_assets(symbol=[sym1], data_points=365, interval='year')
-    df=pd.json_normalize(data['data'][0]['timeSeries'])
+    # data = lc.get_assets(symbol=[sym1], data_points=365, interval='year')
+    # df=pd.json_normalize(data['data'][0]['timeSeries'])
+    df = data(sym1)
     df['tweet_sentiment1']=df['tweet_sentiment1']+df['tweet_sentiment2']
     df['tweet_sentiment5']=df['tweet_sentiment4']+df['tweet_sentiment5']
     return df[['tweet_sentiment1','tweet_sentiment5']]
@@ -94,7 +150,7 @@ def getTickerList():
 
 def lunarData(symbols, dataPoints = 10 ):
     # lc = LunarCrush()
-    data = lc.get_assets(symbol=[symbols], data_points = dataPoints, interval='month')
+    data = lc.get_assets(symbol=symbols, data_points = dataPoints, interval='month')
     df=pd.json_normalize(data['data'][0]['timeSeries'])
     return df
 

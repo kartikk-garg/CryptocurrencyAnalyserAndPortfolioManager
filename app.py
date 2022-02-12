@@ -1,7 +1,4 @@
-import os
 import streamlit as st
-import numpy as np
-from PIL import  Image
 
 # Custom imports 
 from multipage import MultiPage
