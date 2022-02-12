@@ -12,22 +12,41 @@ def allCoinsData():
     return df
 
 def getTickerList():
-    response=rq.get("https://api.coinpaprika.com/v1/coins")
+    response = rq.get("https://api.coinpaprika.com/v1/coins")
     test=pd.DataFrame(response.json())
     td=test.head(50)
     td.symbol
 
+def lunarData(symbols, dataPoints = 10 ):
+    lc = LunarCrush()
+    data = lc.get_assets(symbol=symbols, data_points = dataPoints, interval='month')
+    df=pd.json_normalize(data['data'][0]['timeSeries'])
+    return df
+
 def socialData(symbol):
     lc = LunarCrush()
-    data = lc.get_assets(symbol=[symbol], data_points=7, interval='day')
-    data = json.dumps(data)
-    return data
+    
+    influencers = lc.get_influencers(symbol)
+    influencers = json.dumps(influencers)
+
+    feed = lc.get_feeds(symbol)
+    feed = json.dumps(feed)
+
+    return influencers, feed
+    
 
 def googleTrends(coin):
     pytrends = TrendReq(hl='en-US', tz=360) 
     pytrends.build_payload(kw_list=["BTC"])
     related_queries = pytrends.related_queries()
     related_queries.values()
+
+def coinDict(coinMetrics):
+    coinDict = {}
+    coinDict[coinMetrics['Ticker']] = coinMetrics
+    coinDict = json.dumps(coinDict)
+    return coinDict
+
 
 df = allCoinsData()
 symbols = df['symbol']
