@@ -13,11 +13,11 @@ def app():
 
             st.write("Price")
             closedf = utility.dataForOne(symbol, "close")
-            st.line_chart(closedf)
+            st.area_chart(closedf)
 
             st.write("Volume")
             volumedf = utility.dataForOne(symbol, "volume")
-            st.line_chart(volumedf)
+            st.bar_chart(volumedf)
 
             st.write("Volatility")
             volatilitydf = utility.dataForOne(symbol, "volatility")
@@ -25,7 +25,7 @@ def app():
 
             st.write("Percent Change 24h")
             perChange24hdf = utility.dataForOne(symbol, "percent_change_24h")
-            st.line_chart(perChange24hdf)
+            st.bar_chart(perChange24hdf)
 
             st.write("Market Dominance")
             marketdominancedf = utility.dataForOne(symbol, "market_dominance")
@@ -37,11 +37,11 @@ def app():
             
             st.write("Price")
             closedf = utility.compBtwTwoCoinsBasesAttribute(symbol[0], symbol[1], "close")
-            st.line_chart(closedf)
+            st.area_chart(closedf)
 
             st.write("Volume")
             volumedf = utility.compBtwTwoCoinsBasesAttribute(symbol[0], symbol[1], "volume")
-            st.line_chart(volumedf)
+            st.bar_chart(volumedf)
 
             st.write("Volatility")
             volatilitydf = utility.compBtwTwoCoinsBasesAttribute(symbol[0], symbol[1], "volatility")
@@ -49,7 +49,7 @@ def app():
 
             st.write("Percent Change 24h")
             perChange24hdf = utility.compBtwTwoCoinsBasesAttribute(symbol[0], symbol[1], "percent_change_24h")
-            st.line_chart(perChange24hdf)
+            st.bar_chart(perChange24hdf)
 
             st.write("Market Dominance")
             marketdominancedf = utility.compBtwTwoCoinsBasesAttribute(symbol[0], symbol[1], "market_dominance")

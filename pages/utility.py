@@ -10,6 +10,12 @@ from pytrends.request import TrendReq
 lc = LunarCrush()
 
 
+def dataForSingleCoinDoubleAttribute(sym1, attr1, attr2):
+    data = lc.get_assets(symbol=[sym1], data_points=100, interval='year')
+    df=pd.json_normalize(data['data'][0]['timeSeries'])
+    
+    return df[[attr1, attr2]]
+
 def dataForOne(sym1, attr):
     data = lc.get_assets(symbol=[sym1], data_points=100, interval='year')
     df=pd.json_normalize(data['data'][0]['timeSeries'])

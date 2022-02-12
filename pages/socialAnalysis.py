@@ -15,20 +15,59 @@ def app():
             influencers = utility.socialData(symbol)
         
     with st.expander("Twitter"):
+
         st.write("Number Of Bullish vs Bearish Post")
         bvb = utility.bullvsbear(symbol)
-        st.line_chart(bvb)
+        st.bar_chart(bvb)
         
+        st.write("tweet")
+        tweetdf = utility.dataForOne(symbol,"tweets")
+        st.line_chart(tweetdf)
+
+        st.write("tweet_spam")
+        tweetSpamdf = utility.dataForOne(symbol,"tweet_spam")
+        st.line_chart(tweetSpamdf)
+
+        st.write("tweet_followers")
+        tweetFollowersdf = utility.dataForOne(symbol,"tweet_followers")
+        st.bar_chart(tweetFollowersdf)
+
+        st.write("tweet_retweets")
+        tweetRetweetsdf = utility.dataForOne(symbol,"tweet_retweets")
+        st.area_chart(tweetRetweetsdf)
+
         st.json(influencers)
 
     with st.expander("reddit"):
-        st.write("reddit")
+        st.write("Reddit Posts")
+        redditPostsdf = utility.dataForOne(symbol,"reddit_posts")
+        st.line_chart(redditPostsdf)
+
+        st.write("Reddit Posts Scores")
+        redditPostsScoredf = utility.dataForOne(symbol,"reddit_posts_score")
+        st.line_chart(redditPostsScoredf)
 
     with st.expander("Compare"):
         symbols = st.multiselect("Select Coins", utility.symbols[:3000])
         if len(symbols) == 2:
             SIC = utility.socialImpactComp(symbols[0], symbols[1])
-            st.line_graph(SIC)
+            st.line_chart(SIC)
+
+            st.write("tweet")
+            tweetdf = utility.compBtwTwoCoinsBasesAttribute(symbols[0], symbols[1], "tweets")
+            st.bar_chart(tweetdf)
+
+            st.write("tweet_spam")
+            tweetSpamdf = utility.compBtwTwoCoinsBasesAttribute(symbols[0], symbols[1],"tweet_spam")
+            st.bar_chart(tweetSpamdf)
+
+            st.write("tweet_followers")
+            tweetFollowersdf = utility.compBtwTwoCoinsBasesAttribute(symbols[0], symbols[1],"tweet_followers")
+            st.line_chart(tweetFollowersdf)
+
+            st.write("tweet_retweets")
+            tweetRetweetsdf = utility.compBtwTwoCoinsBasesAttribute(symbols[0], symbols[1],"tweet_retweets")
+            st.area_chart(tweetRetweetsdf)
     
     
     
