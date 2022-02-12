@@ -6,6 +6,44 @@ import json
 from lunarcrush import LunarCrush
 from pytrends.request import TrendReq
 
+def socialImpactComp(sym1,sym2):
+    lc = LunarCrush()
+    data = lc.get_assets(symbol=[sym1,sym2], data_points=365, interval='year')
+    df10=pd.json_normalize(data['data'][0]['timeSeries'])
+    df11=pd.json_normalize(data['data'][1]['timeSeries'])
+    df=pd.DataFrame(columns=[sym1,sym2])
+    df[sym1]=df10['social_impact_score']
+    df[sym2]=df11['social_impact_score']
+    return df
+
+def test(sym1):
+    lc = LunarCrush()
+    data = lc.get_assets(symbol=[sym1], data_points=365, interval='year')
+    df=pd.json_normalize(data['data'][0]['timeSeries'])
+    df['Bearish']=df['tweet_sentiment1']+df['tweet_sentiment2']
+    df['Bullish']=df['tweet_sentiment4']+df['tweet_sentiment5']
+    return df[['Bearish','Bullish']]
+    st.line_chart()
+
+def bullvsbear(sym1):
+    lc = LunarCrush()
+    data = lc.get_assets(symbol=[sym1], data_points=365, interval='year')
+    df=pd.json_normalize(data['data'][0]['timeSeries'])
+    df['tweet_sentiment1']=df['tweet_sentiment1']+df['tweet_sentiment2']
+    df['tweet_sentiment5']=df['tweet_sentiment4']+df['tweet_sentiment5']
+    return df[['tweet_sentiment1','tweet_sentiment5']]
+    # plt.plot()
+
+def percChangeBtwTwo(sym1, sym2):
+    lc = LunarCrush()
+    data = lc.get_assets(symbol=[sym1,sym2], data_points=365, interval='year')
+    df10=pd.json_normalize(data['data'][0]['timeSeries'])
+    df11=pd.json_normalize(data['data'][1]['timeSeries'])
+    df=pd.DataFrame(columns=[sym1,sym2])
+    df[sym1]=(df10['close']-df10['open'])/df10['open']*100
+    df[sym2]=(df11['close']-df11['open'])/df11['open']*100
+    return df
+
 def allCoinsData():
     response=rq.get("https://api.coinpaprika.com/v1/tickers")
     df=pd.json_normalize(response.json())
@@ -19,7 +57,7 @@ def getTickerList():
 
 def lunarData(symbols, dataPoints = 10 ):
     lc = LunarCrush()
-    data = lc.get_assets(symbol=symbols, data_points = dataPoints, interval='month')
+    data = lc.get_assets(symbol=[symbols], data_points = dataPoints, interval='month')
     df=pd.json_normalize(data['data'][0]['timeSeries'])
     return df
 
@@ -34,7 +72,6 @@ def socialData(symbol):
 
     return influencers, feed
     
-
 def googleTrends(coin):
     pytrends = TrendReq(hl='en-US', tz=360) 
     pytrends.build_payload(kw_list=["BTC"])

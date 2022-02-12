@@ -16,6 +16,7 @@ app = MultiPage()
 # st.image(display, width = 400)
 # st.title("Data Storyteller Application")
 # col1.image(display, width = 400)
+st.set_page_config(layout="wide")
 st.title("Cryptocurrency Analysis And Management")
 
 # Add all your application here

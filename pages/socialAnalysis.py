@@ -4,19 +4,35 @@ import json
 import pandas as pd 
 
 def app():
-    symbol = st.selectbox("Coin", utility.symbols[:3000])
-    df = utility.lunarData(symbol)
-    st.dataframe(df)
-    # st.json(data)
-    with st.expander("Twitter"):
-        st.line_chart(df[['tweets','tweet_spam']])
+    with st.expander("Analyse"):
+        symbol = st.selectbox("Coin", utility.symbols[:3000])
+        if symbol:
+            df = utility.lunarData(symbol)
+            st.dataframe(df)
 
-        influencers = utility.socialData(symbol)
-        st.json(influencers)
+            st.write("Number Of Bullish vs Bearish Post")
+            bvb = utility.bullvsbear(symbol)
+            st.line_chart(bvb)
+            # st.json(data)
 
-    with st.expander("reddit"):
-        st.write("reddit")
+            st.write("test")
+            test = utility.test(symbol)
+            st.line_chart(test)
+
+            influencers = utility.socialData(symbol)
+        
+        with st.expander("Twitter"):
+            
+            st.json(influencers)
+
+        with st.expander("reddit"):
+            st.write("reddit")
     
+    with st.Expander("Compare"):
+        symbols = st.multiselect("Select Coins", utility.symbols[:3000])
+        if len(symbols) == 2:
+            SIC = utility.socialImpactComp(symbols[0], symbols[1])
+            st.line_graph(SIC)
     
     
     

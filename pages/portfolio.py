@@ -30,9 +30,9 @@ def app():
             coinMetrics['TotalPrice'] = price*quantity
 
             coins = utility.coinDict(coinMetrics)
-
+            st.json(coins)
     
-    st.json(coins)
+    
     
     
 
