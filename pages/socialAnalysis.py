@@ -10,25 +10,21 @@ def app():
             df = utility.lunarData(symbol)
             st.dataframe(df)
 
-            st.write("Number Of Bullish vs Bearish Post")
-            bvb = utility.bullvsbear(symbol)
-            st.line_chart(bvb)
             # st.json(data)
-
-            st.write("test")
-            test = utility.test(symbol)
-            st.line_chart(test)
 
             influencers = utility.socialData(symbol)
         
-        with st.expander("Twitter"):
-            
-            st.json(influencers)
+    with st.expander("Twitter"):
+        st.write("Number Of Bullish vs Bearish Post")
+        bvb = utility.bullvsbear(symbol)
+        st.line_chart(bvb)
+        
+        st.json(influencers)
 
-        with st.expander("reddit"):
-            st.write("reddit")
-    
-    with st.Expander("Compare"):
+    with st.expander("reddit"):
+        st.write("reddit")
+
+    with st.expander("Compare"):
         symbols = st.multiselect("Select Coins", utility.symbols[:3000])
         if len(symbols) == 2:
             SIC = utility.socialImpactComp(symbols[0], symbols[1])
