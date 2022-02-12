@@ -5,26 +5,25 @@ from PIL import  Image
 
 # Custom imports 
 from multipage import MultiPage
-from pages import about, howtouse, main, portfolio # import your pages here
+from pages import about, howtouse, analysis, socialAnalysis, main, portfolio # import your pages here
 
 # Create an instance of the app 
 app = MultiPage()
 
 # Title of the main page
-display = Image.open('Logo.png')
-display = np.array(display)
+# display = Image.open('Logo.png')
+# display = np.array(display)
 # st.image(display, width = 400)
 # st.title("Data Storyteller Application")
-col1, col2 = st.beta_columns(2)
-col1.image(display, width = 400)
-col2.title("Data Storyteller Application")
+# col1.image(display, width = 400)
+st.title("Cryptocurrency Analysis And Management")
 
 # Add all your application here
-app.add_page("Upload Data", howtouse.app)
-app.add_page("Change Metadata", about.app)
-app.add_page("Machine Learning", main.app)
-app.add_page("Data Analysis",portfolio.app)
-
-
+app.add_page("Home", main.app)
+app.add_page("Analysis",analysis.app)
+app.add_page("Social Analysis", socialAnalysis.app)
+app.add_page("Portfolio",portfolio.app)
+app.add_page("How To Use", howtouse.app)
+app.add_page("About Us", about.app)
 # The main app
 app.run()
