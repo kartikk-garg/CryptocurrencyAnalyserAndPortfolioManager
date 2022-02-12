@@ -12,12 +12,14 @@ def app():
     gainers = df.sort_values(by = 'quotes.USD.percent_change_24h')[['name', 'quotes.USD.price', 'quotes.USD.percent_change_24h']][-10:]
     col2.dataframe(gainers)
 
-    col2.header("Top 10 Loosers")
+    col3, col4 = st.columns((2,1))
+    col4.header("Top 10 Loosers")
     loosers = df.sort_values(by = 'quotes.USD.percent_change_24h')[['name', 'quotes.USD.price', 'quotes.USD.percent_change_24h']][:10]
-    col2.dataframe(loosers)
+    col4.dataframe(loosers)
 
     news = utility.socialData(['BTC'])[1]
-    st.json(news)
+
+    col3.json(news)
 
 
     
