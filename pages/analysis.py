@@ -11,23 +11,23 @@ def app():
             st.dataframe(df)
 
 
-            st.write("Price")
+            st.header("Price")
             closedf = utility.dataForOne(symbol, "close")
             st.area_chart(closedf)
 
-            st.write("Volume")
+            st.header("Volume")
             volumedf = utility.dataForOne(symbol, "volume")
             st.bar_chart(volumedf)
 
-            st.write("Volatility")
+            st.header("Volatility")
             volatilitydf = utility.dataForOne(symbol, "volatility")
             st.line_chart(volatilitydf)
 
-            st.write("Percent Change 24h")
+            st.header("Percent Change 24h")
             perChange24hdf = utility.dataForOne(symbol, "percent_change_24h")
             st.bar_chart(perChange24hdf)
 
-            st.write("Market Dominance")
+            st.header("Market Dominance")
             marketdominancedf = utility.dataForOne(symbol, "market_dominance")
             st.line_chart(marketdominancedf)
 
@@ -35,23 +35,23 @@ def app():
         symbol = st.multiselect("Select Coin(s)", utility.symbols[:3000])
         if len(symbol) == 2:
             
-            st.write("Price")
+            st.header("Price")
             closedf = utility.compBtwTwoCoinsBasesAttribute(symbol[0], symbol[1], "close")
             st.area_chart(closedf)
 
-            st.write("Volume")
+            st.header("Volume")
             volumedf = utility.compBtwTwoCoinsBasesAttribute(symbol[0], symbol[1], "volume")
             st.bar_chart(volumedf)
 
-            st.write("Volatility")
+            st.header("Volatility")
             volatilitydf = utility.compBtwTwoCoinsBasesAttribute(symbol[0], symbol[1], "volatility")
             st.line_chart(volatilitydf)
 
-            st.write("Percent Change 24h")
+            st.header("Percent Change 24h")
             perChange24hdf = utility.compBtwTwoCoinsBasesAttribute(symbol[0], symbol[1], "percent_change_24h")
             st.bar_chart(perChange24hdf)
 
-            st.write("Market Dominance")
+            st.header("Market Dominance")
             marketdominancedf = utility.compBtwTwoCoinsBasesAttribute(symbol[0], symbol[1], "market_dominance")
             st.line_chart(marketdominancedf)
             # df = utility.percChangeBtwTwo(symbol[0], symbol[1])

@@ -9,6 +9,16 @@ from pytrends.request import TrendReq
 
 lc = LunarCrush()
 
+def perChange(sym1, arg):
+    data = lc.get_assets(symbol=[sym1], data_points=365, interval='year')
+    df10=pd.json_normalize(data['data'][0]['timeSeries'])
+    df=pd.DataFrame(columns=['Price',arg])
+    df['Price']=(df10['close']-df10['open'])/df10['open']*100
+    t1=df10[arg][1:].reset_index(drop=True)
+    t2=df10[arg]
+    df[arg]=(t2-t1)/t1*100
+    df.dropna(inplace=True)
+    return df
 
 def dataForSingleCoinDoubleAttribute(sym1, attr1, attr2):
     data = lc.get_assets(symbol=[sym1], data_points=100, interval='year')
