@@ -2,7 +2,6 @@ from attr import attr
 import requests as rq
 import pandas as pd
 from pandas.io.json import json_normalize
-import san
 import json
 from lunarcrush import LunarCrush
 from pytrends.request import TrendReq
@@ -12,10 +11,14 @@ import requests
 from lunarcrush import LunarCrush
 import pandas as pd
 
-
-
 lc = LunarCrush()
 
+def getDetailsByID(idname):
+    link="https://api.coinpaprika.com/v1/coins/"+idname
+    response=rq.get(link)
+    pd.json_normalize(response.json())[['symbol','name','type','platform','description','started_at','development_status',
+                    'links.explorer', 'links.facebook','links.reddit', 'links.source_code', 'links.website', 'links.youtube',]]
+                    
 def theTweet(url):
     api="https://publish.twitter.com/oembed?url={}".format(url)
     response=requests.get(api)
@@ -26,7 +29,7 @@ def feeds(symbol):
     resS = []
     feed = lc.get_feeds(symbol)
     urls=pd.json_normalize(feed['data'])['url']
-    
+
     for i in range(min(5,urls.size)):
         resS.append(theTweet(urls[i]))
         

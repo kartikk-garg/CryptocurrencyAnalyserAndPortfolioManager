@@ -18,7 +18,7 @@ def app():
             with col3:
                 price = st.number_input('Price')
 
-            submitted = st.form_submit_button("Add")
+        submitted = st.form_submit_button("Add")
         
         if submitted:  
             
